@@ -1,0 +1,6 @@
+@OpticianWebAPI_HostAddress = http://localhost:5057
+
+GET {{OpticianWebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
