@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -20,6 +17,9 @@ namespace OpticianWebAPI.Models
         [Column("modelCode")]
         [MaxLength(30)]
         public string ModelCode {get;set;} = string.Empty;
+        [Key]
+        [Column("cost")]
+        public decimal Cost{get;set;}
         [MaxLength(30)]
         [Column("color")]
         public string? Color { get; set; }
