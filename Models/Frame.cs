@@ -15,11 +15,11 @@ namespace OpticianWebAPI.Models
         [Required]
         [Column("brand")]
         [MaxLength(30)]
-        public string? Brand {get;set;}
+        public string Brand {get;set;} = string.Empty;
         [Required]
         [Column("modelCode")]
         [MaxLength(30)]
-        public string? ModelCode {get;set;}
+        public string ModelCode {get;set;} = string.Empty;
         [MaxLength(30)]
         [Column("color")]
         public string? Color { get; set; }
@@ -28,5 +28,9 @@ namespace OpticianWebAPI.Models
         public string? Material { get; set; }
         [Column("quantity")]
         public int StockQuantity { get; set; }
+        [Column("createdAt")]
+        public DateTimeOffset CreatedAt {get;set;}
+        [Column("updatedAt")]
+        public DateTimeOffset? UpdatedAt {get;set;}
     }
 }
