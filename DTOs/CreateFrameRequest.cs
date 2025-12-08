@@ -8,7 +8,6 @@ namespace OpticianWebAPI.DTOs
         [Required(ErrorMessage = "Marka (Brand) alanı zorunludur.")]
         [MaxLength(30, ErrorMessage = "Marka alanı en fazla 30 karakter olabilir.")]
         public string Brand { get; set; } = string.Empty;
-
         [Required(ErrorMessage = "Model kodu (ModelCode) zorunludur.")]
         [MaxLength(30, ErrorMessage = "Model kodu en fazla 30 karakter olabilir.")]
         public string ModelCode { get; set; } = string.Empty;

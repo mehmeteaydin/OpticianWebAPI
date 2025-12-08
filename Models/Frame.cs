@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OpticianWebAPI.Models
 {
+    [Table("frames")]
     public class Frame
     {
         [Key]
