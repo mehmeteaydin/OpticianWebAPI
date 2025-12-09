@@ -3,7 +3,7 @@ using OpticianWebAPI.Models;
 
 namespace OpticianWebAPI.DTOs
 {
-    public class GlassessResponse
+    public class GlassesResponse
     {
         public Guid Id { get; set; }
         public Guid FrameId { get; set; }

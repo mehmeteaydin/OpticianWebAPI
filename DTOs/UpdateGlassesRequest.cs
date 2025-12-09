@@ -4,7 +4,7 @@ using OpticianWebAPI.Models;
 
 namespace OpticianWebAPI.DTOs
 {
-    public class UpdateGlassessRequest
+    public class UpdateGlassesRequest
     {
         [Required(ErrorMessage = "Çerçeve (Frame) seçimi zorunludur.")]
         public Guid FrameId { get; set; }
