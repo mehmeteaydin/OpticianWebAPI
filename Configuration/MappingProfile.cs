@@ -22,8 +22,8 @@ namespace OpticianWebAPI.Configuration
 
         // --- Glasses Mapping ---
         CreateMap<CreateGlassesRequest, Glasses>();
-        CreateMap<UpdateGlassessRequest, Glasses>();
-        CreateMap<Glasses, GlassessResponse>();
+        CreateMap<UpdateGlassesRequest, Glasses>();
+        CreateMap<Glasses, GlassesResponse>();
     }   
     }
 }
