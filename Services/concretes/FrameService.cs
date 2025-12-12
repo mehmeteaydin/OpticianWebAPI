@@ -1,99 +1,117 @@
 using System;
 using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using OpticianWebAPI.DTOs;
 using OpticianWebAPI.Models;
 
 
 namespace OpticianWebAPI.Services.concretes
 {
-    public class FrameService(IMapper mapper) : IFrameService
+    public class FrameService(AppDbContext appDbContext, IMapper mapper) : IFrameService
     {
         private readonly IMapper _mapper = mapper;
-        private static List<Frame> frames = new()
+        private readonly AppDbContext _appDbContext = appDbContext;
+
+        public async Task<FrameResponse> CreateFrameAsync(CreateFrameRequest request)
         {
-            new Frame
-    {
-        Id = Guid.NewGuid(),
-        Brand = "Ray-Ban",
-        ModelCode = "RB3447 Round Metal",
-        Cost = 3500.50m,
-        Color = "Altın",
-        Material = "Metal",
-        StockQuantity = 15,
-        CreatedAt = DateTimeOffset.UtcNow.AddDays(-30),
-        UpdatedAt = null
-    },
-    new Frame
-    {
-        Id = Guid.NewGuid(),
-        Brand = "Oakley",
-        ModelCode = "OX8156 Holbrook",
-        Cost = 2800.00m,
-        Color = "Mat Siyah",
-        Material = "O-Matter", // Oakley'in özel plastik materyali
-        StockQuantity = 8,
-        CreatedAt = DateTimeOffset.UtcNow.AddDays(-15),
-        UpdatedAt = null
-    },
-    new Frame
-    {
-        Id = Guid.NewGuid(),
-        Brand = "Prada",
-        ModelCode = "PR 17WS",
-        Cost = 6200.00m,
-        Color = "Kaplumbağa", // Tortoise
-        Material = "Asetat",
-        StockQuantity = 4,
-        CreatedAt = DateTimeOffset.UtcNow.AddDays(-60),
-        UpdatedAt = DateTimeOffset.UtcNow.AddDays(-2) // Yakın zamanda güncellenmiş
-    },
-    new Frame
-    {
-        Id = Guid.NewGuid(),
-        Brand = "Tom Ford",
-        ModelCode = "TF5555-B",
-        Cost = 7500.00m,
-        Color = "Lacivert",
-        Material = "Titanyum",
-        StockQuantity = 6,
-        CreatedAt = DateTimeOffset.UtcNow.AddDays(-10),
-        UpdatedAt = null
-    }
-        };
-        Task<FrameResponse> IFrameService.CreateFrameAsync(CreateFrameRequest request)
-        {
-            return Task.FromResult(new FrameResponse());    
+            var frame = _mapper.Map<Frame>(request);
+            frame.Id = Guid.NewGuid();
+            frame.CreatedAt = DateTimeOffset.UtcNow;
+
+            await _appDbContext.Frames.AddAsync(frame);
+            await _appDbContext.SaveChangesAsync();
+
+            return _mapper.Map<FrameResponse>(frame);  
         }
 
-        Task<bool> IFrameService.DeleteFrameAsync(Guid id)
+        public async Task<bool> DeleteFrameAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var frame = await _appDbContext.Frames.FindAsync(id);
+
+            if (frame == null)
+            {
+                return false;
+            }
+
+            _appDbContext.Frames.Remove(frame);
+            await _appDbContext.SaveChangesAsync();
+
+            return true;
         }
 
-        Task<IEnumerable<FrameResponse>> IFrameService.GetAllFramesAsync()
+        public async Task<IEnumerable<FrameResponse>> GetAllFramesAsync()
         {
-            var responseList = _mapper.Map<IEnumerable<FrameResponse>>(frames);
-            return Task.FromResult(responseList); 
+            var frames = await _appDbContext.Frames.ToListAsync();
+            return _mapper.Map<IEnumerable<FrameResponse>>(frames);
         }
 
-        Task<FrameResponse?> IFrameService.GetFrameByIdAsync(Guid id)
+        public async Task<FrameResponse?> GetFrameByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var frame = await _appDbContext.Frames.FindAsync(id);
+
+            if (frame == null)
+            {
+                return null;
+            }
+            return _mapper.Map<FrameResponse>(frame);
         }
 
-        Task<IEnumerable<FrameResponse>> IFrameService.SearchFramesAsync(string searchTerm)
+        public async Task<IEnumerable<FrameResponse>> SearchFramesAsync(string searchTerm)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return new List<FrameResponse>();
+            }
+
+            var term = searchTerm.Trim().ToLower();
+            var frames = await _appDbContext.Frames
+                .Where(f => 
+                    f.Brand.ToLower().Contains(term) || 
+                    
+                    f.ModelCode.ToLower().Contains(term) ||
+                    
+                    (f.Color != null && f.Color.ToLower().Contains(term))
+                )
+                .ToListAsync();
+
+            return _mapper.Map<IEnumerable<FrameResponse>>(frames);
         }
 
-        Task<FrameResponse?> IFrameService.UpdateFrameAsync(Guid id, UpdateFrameRequest request)
+        public async Task<FrameResponse?> UpdateFrameAsync(Guid id, UpdateFrameRequest request)
         {
-            throw new NotImplementedException();
+            var existingFrame = await _appDbContext.Frames.FindAsync(id);
+
+            if (existingFrame == null)
+            {
+                return null;
+            }
+
+            _mapper.Map(request,existingFrame);
+            existingFrame.UpdatedAt = DateTimeOffset.UtcNow;
+
+            await _appDbContext.SaveChangesAsync();
+
+            return _mapper.Map<FrameResponse>(existingFrame);
         }
 
-        Task<bool> IFrameService.UpdateStockQuantityAsync(Guid id, int changeAmount)
+        public async Task<bool> UpdateStockQuantityAsync(Guid id, int changeAmount)
         {
-            throw new NotImplementedException();
+            var existingFrame = await _appDbContext.Frames.FindAsync(id);
+
+            if (existingFrame == null)
+                return false;
+            if (changeAmount == 0)
+                return false;
+            if (existingFrame.StockQuantity + changeAmount < 0)
+                return false;
+
+            existingFrame.UpdatedAt = DateTimeOffset.UtcNow;
+            existingFrame.StockQuantity += changeAmount;
+            
+            await _appDbContext.SaveChangesAsync();
+
+            return true;
         }
     }
 }
