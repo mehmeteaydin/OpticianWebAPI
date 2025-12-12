@@ -1,13 +1,11 @@
 using System;
 using AutoMapper;
-using AutoMapper;
 using OpticianWebAPI.DTOs;
 using OpticianWebAPI.Models;
-using OpticianWebAPI.Models;
+
 
 namespace OpticianWebAPI.Services.concretes
 {
-    public class FrameService(IMapper mapper) : IFrameService
     public class FrameService(IMapper mapper) : IFrameService
     {
         private readonly IMapper _mapper = mapper;
