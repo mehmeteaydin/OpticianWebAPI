@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using OpticianWebAPI.Models;
 
-namespace OpticianWebAPI
+namespace OpticianWebAPI.DatabaseContext
 {
     public class AppDbContext : DbContext
     {
 
-        public AppDbContext(DbContextOptions<AppDbContext> options): base(options)
-        {   
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        {
         }
 
         // Gözlük çerçeve için tablo
