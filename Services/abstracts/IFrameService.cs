@@ -1,7 +1,7 @@
 using System;
 using OpticianWebAPI.DTOs;
 
-namespace OpticianWebAPI.Services
+namespace OpticianWebAPI.Services.abstracts
 {
     public interface IFrameService
     {

@@ -2,7 +2,7 @@ using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OpticianWebAPI.DTOs;
-using OpticianWebAPI.Services;
+using OpticianWebAPI.Services.abstracts;
 
 namespace OpticianWebAPI.Controllers
 {
