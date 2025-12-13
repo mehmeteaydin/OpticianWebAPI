@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using OpticianWebAPI.Services;
+using OpticianWebAPI.Services.abstracts;
 using OpticianWebAPI.Services.concretes;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
+using OpticianWebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,8 +14,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IFrameService,FrameService>();
+builder.Services.AddScoped<ILensService,LensService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => 
 options.TokenValidationParameters = new TokenValidationParameters
@@ -26,6 +32,7 @@ options.TokenValidationParameters = new TokenValidationParameters
    ValidAudience = builder.Configuration["Jwt:Audience"],
    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
 });
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -35,7 +42,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
