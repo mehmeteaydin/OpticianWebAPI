@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using OpticianWebAPI.Services.abstracts;
 using OpticianWebAPI.Services.concretes;
@@ -5,9 +6,20 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using OpticianWebAPI;
+=======
+using OpticianWebAPI;
+using OpticianWebAPI.Services;
+using OpticianWebAPI.Services.concretes;
+using Microsoft.EntityFrameworkCore;
+using OpticianWebAPI.DatabaseContext;
+>>>>>>> keremacar
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

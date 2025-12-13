@@ -18,6 +18,10 @@ namespace OpticianWebAPI.Models
         [Column("modelCode")]
         [MaxLength(30)]
         public string ModelCode {get;set;} = string.Empty;
+<<<<<<< HEAD
+=======
+        
+>>>>>>> keremacar
         [Column("cost")]
         public decimal Cost{get;set;}
         [MaxLength(30)]
