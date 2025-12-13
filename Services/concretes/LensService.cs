@@ -70,5 +70,21 @@ namespace OpticianWebAPI.Services.concretes
 
             return _mapper.Map<LensResponse>(existingLens);
         }
+
+        public async Task<bool> UpdateLensCost(Guid id,decimal newCost)
+        {
+            var existingLens = await _appDbContext.Lens.FindAsync(id);
+            
+            if(existingLens == null)
+                return false;
+            if(newCost < 0)
+                return false;
+            
+            existingLens.UpdatedAt = DateTimeOffset.UtcNow;
+            existingLens.Cost = newCost;
+
+            await _appDbContext.SaveChangesAsync();
+            return true;
+        }
     }
 }

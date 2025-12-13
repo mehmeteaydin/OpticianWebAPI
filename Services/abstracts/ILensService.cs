@@ -9,6 +9,7 @@ namespace OpticianWebAPI.Services.abstracts
         public Task<LensResponse?> GetLensByIdAsync(Guid id);
         public Task<LensResponse> CreateLensAsync(CreateLensRequest request);
         public Task<LensResponse?> UpdateLensAsync(Guid id, UpdateLensRequest request);
+        public Task<bool> UpdateLensCost(Guid id,decimal newCost);
         public Task<bool> DeleteLensAsync(Guid id);
     }
 }
