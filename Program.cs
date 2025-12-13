@@ -6,7 +6,7 @@ using OpticianWebAPI.DatabaseContext;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ARTIK HARDCODE YOK, appsettings'den okumalı:
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
