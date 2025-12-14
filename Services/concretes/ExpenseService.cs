@@ -44,7 +44,7 @@ namespace OpticianWebAPI.Services.concretes
 
         }
 
-        public Task<Dictionary<int, string>> GetAllExtepnseTypes()
+        public Task<Dictionary<int, string>> GetAllExtepnseTypesAsync()
         {
                 var types = Enum.GetValues(typeof(ExpensesType))
                 .Cast<ExpensesType>()

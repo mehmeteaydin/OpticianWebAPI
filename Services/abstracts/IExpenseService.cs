@@ -10,6 +10,6 @@ namespace OpticianWebAPI.Services.abstracts
     {
         Task<ExpenseResponse> AddExpenseAsync(CreateExpenseRequest request);
 
-        Task<Dictionary<int, string>> GetAllExtepnseTypes();
+        Task<Dictionary<int, string>> GetAllExtepnseTypesAsync();
     }
 }

@@ -18,7 +18,7 @@ namespace OpticianWebAPI.Services.concretes
         {
             _context = context;
         }
-        public async Task<SaleResponse> MakeSale(CreateSaleRequest request)
+        public async Task<SaleResponse> MakeSaleAsync(CreateSaleRequest request)
         {
             var frame = _context.Frames.FirstOrDefault(f => f.Id == request.FrameId);
 
