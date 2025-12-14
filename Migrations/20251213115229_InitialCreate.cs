@@ -9,8 +9,10 @@ namespace OpticianWebAPI.Migrations
     public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
+        
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+        
             migrationBuilder.CreateTable(
                 name: "frames",
                 columns: table => new
@@ -29,7 +31,7 @@ namespace OpticianWebAPI.Migrations
                 {
                     table.PrimaryKey("PK_frames", x => x.id);
                 });
-
+        
             migrationBuilder.CreateTable(
                 name: "lenses",
                 columns: table => new

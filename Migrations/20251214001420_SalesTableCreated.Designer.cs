@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OpticianWebAPI.DatabaseContext;
@@ -11,9 +12,11 @@ using OpticianWebAPI.DatabaseContext;
 namespace OpticianWebAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251214001420_SalesTableCreated")]
+    partial class SalesTableCreated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,35 +24,6 @@ namespace OpticianWebAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("OpticianWebAPI.Models.Expenses", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("numeric")
-                        .HasColumnName("amount");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)")
-                        .HasColumnName("description");
-
-                    b.Property<DateTimeOffset>("ExpenseDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("expense_date");
-
-                    b.Property<int>("ExpenseType")
-                        .HasColumnType("integer")
-                        .HasColumnName("expense_type");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("expenses");
-                });
 
             modelBuilder.Entity("OpticianWebAPI.Models.Frame", b =>
                 {
