@@ -20,7 +20,8 @@ namespace OpticianWebAPI.Configuration
 
             CreateMap<CreateGlassesRequest, Glasses>();
             CreateMap<UpdateGlassesRequest, Glasses>();
-            CreateMap<Glasses, GlassesResponse>();
+            CreateMap<Glasses, GlassesResponse>()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToString()));          
         }   
     }
 }
