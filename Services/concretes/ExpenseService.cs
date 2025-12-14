@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using OpticianWebAPI.DatabaseContext;
+using OpticianWebAPI.DTOs;
+using OpticianWebAPI.Models;
+using OpticianWebAPI.Services.abstracts;
+
+namespace OpticianWebAPI.Services.concretes
+{
+    public class ExpenseService : IExpenseService
+    {
+        private readonly AppDbContext _context;
+
+        public ExpenseService(AppDbContext context)
+        {
+            _context = context;
+        }
+        public async Task<ExpenseResponse> AddExpenseAsync(CreateExpenseRequest request)
+        {
+            var expense = new Expenses
+            {
+                Id = Guid.NewGuid(),
+                Amount = request.Amount,
+                Description = request.Description,
+                ExpenseType = request.Type,
+                ExpenseDate = DateTimeOffset.Now
+            };
+
+            await _context.Expenses.AddAsync(expense);
+            await _context.SaveChangesAsync();
+
+            return new ExpenseResponse
+            {
+                Id = expense.Id,
+                Amount = expense.Amount,
+                Description = expense.Description,
+                ExpenseDate = expense.ExpenseDate,
+                TypeId = (int)expense.ExpenseType,
+                TypeName = expense.ExpenseType.ToString()
+            };
+
+
+        }
+
+        public Task<Dictionary<int, string>> GetAllExtepnseTypes()
+        {
+                var types = Enum.GetValues(typeof(ExpensesType))
+                .Cast<ExpensesType>()
+                .ToDictionary( t =>(int)t,
+                t => t.ToString()
+                );
+
+                return Task.FromResult(types);
+        }
+    }
+}
