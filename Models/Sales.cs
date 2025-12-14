@@ -25,9 +25,10 @@ namespace OpticianWebAPI.Models
 
         [Column("sold_price")]
         public decimal SoldPrice{get; set;}
+        [Required]
         [Column("glasses_id")]
         public Guid GlassesId{get; set;}
-        [Column("GlassesId")]
+        [ForeignKey("GlassesId")]
         public Glasses? Glasses{get; set;}
 
     }
