@@ -19,6 +19,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IFrameService,FrameService>();
 builder.Services.AddScoped<ILensService,LensService>();
+builder.Services.AddScoped<IGlassesService,GlassesService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 
