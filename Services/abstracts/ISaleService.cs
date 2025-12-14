@@ -8,6 +8,6 @@ namespace OpticianWebAPI.Services.abstracts
 {
     public interface ISaleService
     {
-        Task<SaleResponse> MakeSale(CreateSaleRequest request);
+        Task<SaleResponse> MakeSaleAsync(CreateSaleRequest request);
     }
 }
