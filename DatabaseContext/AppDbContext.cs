@@ -23,6 +23,12 @@ namespace OpticianWebAPI.DatabaseContext
         // Gözlük için tablo
         public DbSet<Glasses> Glasses {get; set;}
 
+        // Gözlük satışı için gerekli olan tablo
+        public DbSet<Sales> Sales {get; set;}
+
+        // Giderler için gerekli tablo
+        public DbSet<Expenses> Expenses{get; set;}
+
         
     }
 }
