@@ -19,6 +19,7 @@ namespace OpticianWebAPI.Controllers
             _expenseService = expenseService;
         }
 
+        // Bütün Gider tiplerini getir
         [HttpGet("types")]
         public async Task<IActionResult> GetTypes()
         {
