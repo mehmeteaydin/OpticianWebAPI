@@ -35,7 +35,7 @@ options.TokenValidationParameters = new TokenValidationParameters
    ValidateIssuerSigningKey = true,
    ValidIssuer = builder.Configuration["Jwt:Issure"],
    ValidAudience = builder.Configuration["Jwt:Audience"],
-   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
 });
 
 var app = builder.Build();
