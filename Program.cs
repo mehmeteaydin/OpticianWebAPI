@@ -20,6 +20,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IFrameService,FrameService>();
 builder.Services.AddScoped<ILensService,LensService>();
 builder.Services.AddScoped<IGlassesService,GlassesService>();
+builder.Services.AddScoped<IAuthService,AuthService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 
@@ -33,7 +34,7 @@ options.TokenValidationParameters = new TokenValidationParameters
    ValidateAudience = true,
    ValidateLifetime = true,
    ValidateIssuerSigningKey = true,
-   ValidIssuer = builder.Configuration["Jwt:Issure"],
+   ValidIssuer = builder.Configuration["Jwt:Issuer"],
    ValidAudience = builder.Configuration["Jwt:Audience"],
    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
 });
