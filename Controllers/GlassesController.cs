@@ -2,6 +2,7 @@ using System;
 using OpticianWebAPI.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using OpticianWebAPI.Services.abstracts;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OpticianWebAPI.Controllers
 {
@@ -32,6 +33,7 @@ namespace OpticianWebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<GlassesResponse>> Create(CreateGlassesRequest request)
         {
             try
@@ -46,6 +48,7 @@ namespace OpticianWebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Update(Guid id, UpdateGlassesRequest request)
         {
             try
@@ -65,6 +68,7 @@ namespace OpticianWebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var isDeleted = await _glassesService.DeleteGlassesAsync(id);

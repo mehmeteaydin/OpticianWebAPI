@@ -8,7 +8,7 @@ namespace OpticianWebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    [Authorize(Roles ="admin")]
     public class FramesController(IFrameService frameService) : ControllerBase
     {
         private readonly IFrameService frameService = frameService;

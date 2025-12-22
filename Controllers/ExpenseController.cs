@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OpticianWebAPI.DTOs;
 using OpticianWebAPI.Services.abstracts;
@@ -10,6 +11,7 @@ namespace OpticianWebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "admin")]
     public class ExpenseController : ControllerBase
     {
         private readonly IExpenseService _expenseService;
