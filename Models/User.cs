@@ -16,21 +16,22 @@ namespace OpticianWebAPI.Models
 
         [Required]
         [Column("name")]
-        public string Name {get; set;} = string.Empty;
+        public string Username {get; set;} = string.Empty;
 
         [Required]
         [Column("role_type")]
         public RoleType Role {get; set;}
 
+        [Required]
+        [Column("password")]
+        public string Password {get; set;} = string.Empty;
 
     }
 
     public enum RoleType
     {
-        Admin = 1,
-
-        Employee = 2,
-
-        Customer = 3
+        Admin,
+        Employee,
+        Customer
     }
 }

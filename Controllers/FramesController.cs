@@ -8,6 +8,7 @@ namespace OpticianWebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class FramesController(IFrameService frameService) : ControllerBase
     {
         private readonly IFrameService frameService = frameService;
@@ -31,6 +32,7 @@ namespace OpticianWebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteFrame(Guid id)
         {
             var frame = await frameService.GetFrameByIdAsync(id);
