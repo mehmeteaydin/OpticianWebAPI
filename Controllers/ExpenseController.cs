@@ -11,7 +11,7 @@ namespace OpticianWebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "Admin")]
     public class ExpenseController : ControllerBase
     {
         private readonly IExpenseService _expenseService;

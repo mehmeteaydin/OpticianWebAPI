@@ -12,7 +12,7 @@ namespace OpticianWebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "Admin")]
     public class LensController(ILensService lensService) : ControllerBase
     {
         private readonly ILensService lensService = lensService;

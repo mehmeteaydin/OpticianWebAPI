@@ -33,7 +33,7 @@ namespace OpticianWebAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<GlassesResponse>> Create(CreateGlassesRequest request)
         {
             try
@@ -48,7 +48,7 @@ namespace OpticianWebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(Guid id, UpdateGlassesRequest request)
         {
             try
@@ -68,7 +68,7 @@ namespace OpticianWebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var isDeleted = await _glassesService.DeleteGlassesAsync(id);

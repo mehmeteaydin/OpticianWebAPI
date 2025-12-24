@@ -11,7 +11,7 @@ namespace OpticianWebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "Admin")]
     public class SaleController : ControllerBase
     {
         private readonly ISaleService _saleService;
