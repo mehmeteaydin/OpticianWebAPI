@@ -29,6 +29,9 @@ namespace OpticianWebAPI.DatabaseContext
         // Giderler için gerekli tablo
         public DbSet<Expenses> Expenses{get; set;}
 
+        // Kullanıcılar için gerekli tablo
+        public DbSet<User> Users{get; set;}
+
         
     }
 }
