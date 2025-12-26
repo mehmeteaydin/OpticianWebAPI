@@ -9,10 +9,11 @@ using OpticianWebAPI.DatabaseContext;
 
 namespace OpticianWebAPI.Services.concretes
 {
-    public class FrameService(AppDbContext appDbContext, IMapper mapper) : IFrameService
+    public class FrameService(AppDbContext appDbContext,ILogger<FrameService> logger, IMapper mapper) : IFrameService
     {
         private readonly IMapper _mapper = mapper;
         private readonly AppDbContext _appDbContext = appDbContext;
+        private readonly ILogger _logger = logger;
 
         public async Task<FrameResponse> CreateFrameAsync(CreateFrameRequest request)
         {
@@ -22,6 +23,9 @@ namespace OpticianWebAPI.Services.concretes
 
             await _appDbContext.Frames.AddAsync(frame);
             await _appDbContext.SaveChangesAsync();
+
+            _logger.LogInformation("Yeni lens eklendi. Model Kodu: {ModelCode}, Tutar: {Amount}, Renk: {Color}, Materiyal: {Material}, Stok Miktarı: {StockQuantity}, Ekleme Tarihi: {CreatedAt}",
+            frame.ModelCode,frame.Cost,frame.Color,frame.Material,frame.StockQuantity,frame.CreatedAt);
 
             return _mapper.Map<FrameResponse>(frame);  
         }
