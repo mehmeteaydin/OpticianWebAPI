@@ -8,7 +8,7 @@ using OpticianWebAPI.DatabaseContext;
 
 namespace OpticianWebAPI.Services.concretes
 {
-    public class LensService(AppDbContext appDbContext,ILogger<LensService> logger IMapper mapper) : ILensService
+    public class LensService(AppDbContext appDbContext,ILogger<LensService> logger, IMapper mapper) : ILensService
     {
 
         private readonly IMapper _mapper = mapper;
