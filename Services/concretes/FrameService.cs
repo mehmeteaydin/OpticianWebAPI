@@ -24,6 +24,10 @@ namespace OpticianWebAPI.Services.concretes
             await _appDbContext.Frames.AddAsync(frame);
             await _appDbContext.SaveChangesAsync();
 
+            _logger.LogInformation("Yeni çerçeve eklendi. Model Kodu: {ModelCode}, Tutar: {Amount}, Renk: {Color}, Materiyal: {Material}, Stok Miktarı: {StockQuantity}, Ekleme Tarihi: {CreatedAt}",
+            frame.ModelCode,frame.Cost,frame.Color,frame.Material,frame.StockQuantity,frame.CreatedAt);
+
+
             return _mapper.Map<FrameResponse>(frame);  
         }
 

@@ -8,12 +8,12 @@ namespace OpticianWebAPI.DTOs
 {
     public class CreateSaleRequest
     {
-        public string CustomerName{get; set;}
-        public string CustomerPhone{get; set;}
+        public string CustomerName{get; set;} = string.Empty;
+        public string CustomerPhone{get; set;} = string.Empty;
 
         public Guid FrameId {get; set;}
         
-        public string LensBrand{get; set;}
+        public string LensBrand{get; set;} = string.Empty;
         public double LensDegreeLeft {get; set;}
         public double LensDegreeRight {get; set;}
         public decimal LensCost {get; set;}

@@ -33,8 +33,6 @@ namespace OpticianWebAPI.Services.concretes
             await _context.Expenses.AddAsync(expense);
             await _context.SaveChangesAsync();
 
-            
-
             _logger.LogInformation("Yeni gider eklendi. Tutar: {Amount}, Açıklama: {Description}, Tür: {ExpenseType}, Tarih {ExpenseDate}",
              expense.Amount, expense.Description, expense.ExpenseType, expense.ExpenseDate);
 
@@ -58,6 +56,8 @@ namespace OpticianWebAPI.Services.concretes
                 .ToDictionary( t =>(int)t,
                 t => t.ToString()
                 );
+
+                _logger.LogInformation("Bütün giderler getirildi.");
 
                 return Task.FromResult(types);
         }

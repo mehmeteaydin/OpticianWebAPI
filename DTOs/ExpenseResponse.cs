@@ -12,7 +12,7 @@ namespace OpticianWebAPI.DTOs
         public string? Description {get; set;}
         public DateTimeOffset ExpenseDate {get; set;}
 
-        public string TypeName {get; set;}
+        public string TypeName{get; set;} = string.Empty;
         public int TypeId {get; set;}
     }
 }
