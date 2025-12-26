@@ -4,12 +4,14 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using OpticianWebAPI.Services.abstracts;
+using OpticianWebAPI.DatabaseContext;
 
 namespace OpticianWebAPI.Services.concretes
 {
-    public class AuthService(IConfiguration configuration) : IAuthService
+    public class AuthService(IConfiguration configuration,AppDbContext appDbContext) : IAuthService
     {
         private readonly IConfiguration _configuration = configuration;
+        private readonly AppDbContext _appDbContext = appDbContext;
         public string? Login(LoginRequest loginRequest)
         {
             if (loginRequest.Username != "admin" || loginRequest.Password != "12345")
