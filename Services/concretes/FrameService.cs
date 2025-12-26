@@ -9,10 +9,11 @@ using OpticianWebAPI.DatabaseContext;
 
 namespace OpticianWebAPI.Services.concretes
 {
-    public class FrameService(AppDbContext appDbContext, IMapper mapper) : IFrameService
+    public class FrameService(AppDbContext appDbContext,ILogger<FrameService> logger, IMapper mapper) : IFrameService
     {
         private readonly IMapper _mapper = mapper;
         private readonly AppDbContext _appDbContext = appDbContext;
+        private readonly ILogger<FrameService> _logger = logger;
 
         public async Task<FrameResponse> CreateFrameAsync(CreateFrameRequest request)
         {
@@ -22,6 +23,10 @@ namespace OpticianWebAPI.Services.concretes
 
             await _appDbContext.Frames.AddAsync(frame);
             await _appDbContext.SaveChangesAsync();
+
+            _logger.LogInformation("Yeni çerçeve eklendi. Model Kodu: {ModelCode}, Tutar: {Amount}, Renk: {Color}, Materiyal: {Material}, Stok Miktarı: {StockQuantity}, Ekleme Tarihi: {CreatedAt}",
+            frame.ModelCode,frame.Cost,frame.Color,frame.Material,frame.StockQuantity,frame.CreatedAt);
+
 
             return _mapper.Map<FrameResponse>(frame);  
         }
@@ -38,12 +43,17 @@ namespace OpticianWebAPI.Services.concretes
             _appDbContext.Frames.Remove(frame);
             await _appDbContext.SaveChangesAsync();
 
+            _logger.LogInformation("Çerçeve silindi");
+
             return true;
         }
 
         public async Task<IEnumerable<FrameResponse>> GetAllFramesAsync()
         {
             var frames = await _appDbContext.Frames.ToListAsync();
+
+            _logger.LogInformation("Bütün çerçeveler getirildi.");
+
             return _mapper.Map<IEnumerable<FrameResponse>>(frames);
         }
 
@@ -55,6 +65,8 @@ namespace OpticianWebAPI.Services.concretes
             {
                 return null;
             }
+
+            _logger.LogInformation("İstenilen çerçeve getirildi. Cam No: {Id}",frame.Id);
             return _mapper.Map<FrameResponse>(frame);
         }
 
@@ -75,6 +87,8 @@ namespace OpticianWebAPI.Services.concretes
                     (f.Color != null && f.Color.ToLower().Contains(term))
                 )
                 .ToListAsync();
+
+            _logger.LogInformation("Bu ne bilmiyorum ???");
 
             return _mapper.Map<IEnumerable<FrameResponse>>(frames);
         }
@@ -109,6 +123,8 @@ namespace OpticianWebAPI.Services.concretes
 
             existingFrame.UpdatedAt = DateTimeOffset.UtcNow;
             existingFrame.StockQuantity += changeAmount;
+
+            _logger.LogInformation("Çerçeve güncellendi.");
             
             await _appDbContext.SaveChangesAsync();
 

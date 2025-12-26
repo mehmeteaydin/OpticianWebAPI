@@ -8,10 +8,11 @@ using OpticianWebAPI.DatabaseContext;
 
 namespace OpticianWebAPI.Services.concretes
 {
-    public class AuthService(IConfiguration configuration,AppDbContext appDbContext) : IAuthService
+    public class AuthService(IConfiguration configuration,ILogger<AuthService> logger,AppDbContext appDbContext) : IAuthService
     {
         private readonly IConfiguration _configuration = configuration;
         private readonly AppDbContext _appDbContext = appDbContext;
+        private readonly ILogger<AuthService> _logger = logger;
         public string? Login(LoginRequest loginRequest)
         {
             if (loginRequest.Username != "admin" || loginRequest.Password != "12345")
@@ -36,6 +37,7 @@ namespace OpticianWebAPI.Services.concretes
                 expires: DateTime.Now.AddMinutes(60),
                 signingCredentials: credentials);
 
+        _logger.LogInformation("Giriş Yapıldı. Username: {loginUsername}", loginRequest.Username);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
