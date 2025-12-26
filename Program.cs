@@ -9,15 +9,6 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration) // Ayarları appsettings.json'dan oku
-    .Enrich.FromLogContext()
-    .WriteTo.Console() // Konsola yaz
-    .CreateLogger();
-
-builder.Host.UseSerilog();
-
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
@@ -42,14 +33,12 @@ options.TokenValidationParameters = new TokenValidationParameters
    ValidateAudience = true,
    ValidateLifetime = true,
    ValidateIssuerSigningKey = true,
-   ValidIssuer = builder.Configuration["Jwt:Issure"],
+   ValidIssuer = builder.Configuration["Jwt:Issuer"],
    ValidAudience = builder.Configuration["Jwt:Audience"],
    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
 });
 
 var app = builder.Build();
-
-app.UseSerilogRequestLogging();
 
 if (app.Environment.IsDevelopment())
 {
@@ -58,7 +47,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseMiddleware<OpticianWebAPI.Middlewares.GlobalExceptionMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 
