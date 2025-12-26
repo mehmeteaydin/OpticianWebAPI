@@ -4,12 +4,14 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using OpticianWebAPI.Services.abstracts;
+using OpticianWebAPI.DatabaseContext;
 
 namespace OpticianWebAPI.Services.concretes
 {
-    public class AuthService(IConfiguration configuration) : IAuthService
+    public class AuthService(IConfiguration configuration,AppDbContext appDbContext) : IAuthService
     {
         private readonly IConfiguration _configuration = configuration;
+        private readonly AppDbContext _appDbContext = appDbContext;
         public string? Login(LoginRequest loginRequest)
         {
             if (loginRequest.Username != "admin" || loginRequest.Password != "12345")
@@ -17,14 +19,14 @@ namespace OpticianWebAPI.Services.concretes
                 return null;
             }
 
-            // 2. TOKEN ÜRETME İŞLEMİ
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name, loginRequest.Username),
-                new Claim(ClaimTypes.Role, "Admin") 
+                new Claim(ClaimTypes.Role, "Admin"),
+                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
             };
 
             var token = new JwtSecurityToken(
