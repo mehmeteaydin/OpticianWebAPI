@@ -13,10 +13,12 @@ namespace OpticianWebAPI.Services.concretes
     public class SaleService : ISaleService
     {
         private readonly AppDbContext _context;
+        private readonly ILogger<SaleService> _logger;
 
-        public SaleService(AppDbContext context)
+        public SaleService(AppDbContext context, ILogger<SaleService> logger)
         {
             _context = context;
+            _logger = logger;
         }
         public async Task<SaleResponse> MakeSaleAsync(CreateSaleRequest request)
         {
@@ -75,6 +77,8 @@ namespace OpticianWebAPI.Services.concretes
             await _context.Sales.AddAsync(newSale);
 
             await _context.SaveChangesAsync();
+
+            _logger.LogInformation("Yeni satış yapıldı. Müşteri: {CustomerName}, Tutar: {Amount}, Gözlük: {GlassesId}",newSale.CustomerName,newSale.SoldPrice,newSale.GlassesId);
 
             return new SaleResponse
             {
