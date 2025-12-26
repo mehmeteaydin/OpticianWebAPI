@@ -32,7 +32,6 @@ namespace OpticianWebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteFrame(Guid id)
         {
             var frame = await frameService.GetFrameByIdAsync(id);
