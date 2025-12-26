@@ -35,6 +35,9 @@ namespace OpticianWebAPI.Services.concretes
 
             
 
+            _logger.LogInformation("Yeni gider eklendi. Tutar: {Amount}, Açıklama: {Description}, Tür: {ExpenseType}, Tarih {ExpenseDate}",
+             expense.Amount, expense.Description, expense.ExpenseType, expense.ExpenseDate);
+
             return new ExpenseResponse
             {
                 Id = expense.Id,
@@ -55,8 +58,6 @@ namespace OpticianWebAPI.Services.concretes
                 .ToDictionary( t =>(int)t,
                 t => t.ToString()
                 );
-
-                
 
                 return Task.FromResult(types);
         }

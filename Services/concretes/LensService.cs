@@ -23,7 +23,8 @@ namespace OpticianWebAPI.Services.concretes
             await _appDbContext.Lens.AddAsync(lens);
             await _appDbContext.SaveChangesAsync();
 
-            
+            _logger.LogInformation("Cam oluşturuldu. Marka: {Brand}, Sol Derece: {Left}, Sağ Derece: {Right}, Tutar: {Cost}, Oluşturulma Tarihi: {CreatedAt}",
+            lens.Brand,lens.Left,lens.Right,lens.Cost,lens.CreatedAt);
 
             return _mapper.Map<LensResponse>(lens); 
         }
@@ -40,7 +41,7 @@ namespace OpticianWebAPI.Services.concretes
             _appDbContext.Lens.Remove(lens);
             await _appDbContext.SaveChangesAsync();
 
-            
+            _logger.LogInformation("Cam silindi. Lens No: {Id}",lens.Id);
 
             return true;
         }
@@ -48,8 +49,7 @@ namespace OpticianWebAPI.Services.concretes
         public async Task<IEnumerable<LensResponse>> GetAllLensesAsync()
         {
             var lenslist = await _appDbContext.Lens.ToListAsync();
-
-            
+            _logger.LogInformation("Bütün lensler getirildi.");
 
             return _mapper.Map<IEnumerable<LensResponse>>(lenslist);
         }
@@ -58,9 +58,11 @@ namespace OpticianWebAPI.Services.concretes
         {
             var lens = await _appDbContext.Lens.FindAsync(id);
 
-                if (lens==null)
-                
-                    return null;
+            if (lens==null)
+                return null;
+            
+            _logger.LogInformation("İstenilen cam getirildi. Cam No: {Id}, Marka: {Brand}, Tutar: {Cost}",lens.Id, lens.Brand, lens.Cost);
+
             return _mapper.Map<LensResponse>(lens);
         }
 
@@ -78,7 +80,7 @@ namespace OpticianWebAPI.Services.concretes
 
             await _appDbContext.SaveChangesAsync();
 
-            
+            _logger.LogInformation("Lens güncellendi.");
 
             return _mapper.Map<LensResponse>(existingLens);
         }
@@ -97,7 +99,7 @@ namespace OpticianWebAPI.Services.concretes
 
             await _appDbContext.SaveChangesAsync();
 
-            
+            _logger.LogInformation("Cam güncellendi.");
 
             return true;
         }
