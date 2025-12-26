@@ -29,11 +29,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IFrameService,FrameService>();
 builder.Services.AddScoped<ILensService,LensService>();
 builder.Services.AddScoped<IGlassesService,GlassesService>();
+builder.Services.AddScoped<IAuthService,AuthService>();
+builder.Services.AddScoped<IExpenseService,ExpenseService>();
+builder.Services.AddScoped<ISaleService,SaleService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => 
 options.TokenValidationParameters = new TokenValidationParameters
@@ -51,8 +51,11 @@ var app = builder.Build();
 
 app.UseSerilogRequestLogging();
 
-app.UseSwagger();
-app.UseSwaggerUI();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.UseHttpsRedirection();
 app.UseMiddleware<OpticianWebAPI.Middlewares.GlobalExceptionMiddleware>();
