@@ -78,8 +78,7 @@ namespace OpticianWebAPI.Services.concretes
 
             await _context.SaveChangesAsync();
 
-            _logger.LogInformation("Yeni satış yapıldı. Müşteri: {CustomerName}, Tutar: {Amount}, Gözlük: {GlassesId}",newSale.CustomerName,newSale.SoldPrice,newSale.GlassesId);
-
+           
             return new SaleResponse
             {
                 SaleId = newSale.Id,

@@ -21,7 +21,7 @@ namespace OpticianWebAPI.Services.concretes
                 .Include(g => g.Lens)
                 .ToListAsync();
 
-            _logger.LogInformation("Bütün gözlükler getirildi");
+            
 
             return _mapper.Map<IEnumerable<GlassesResponse>>(glassesList);
         }
@@ -35,8 +35,7 @@ namespace OpticianWebAPI.Services.concretes
 
             if (glasses == null) return null;
 
-            _logger.LogInformation("Gözlük getirildi. Gözlük Tipi: {Type}, Cam: {Lens}, Çerçeve: {Frame}, Fiyat: {TotalPrice}, Açıklama: {Description}, Oluşturulma Tarihi: {CreatedAt}",
-            glasses.Type,glasses.Lens,glasses.Frame,glasses.TotalPrice,glasses.Description,glasses.CreatedAt);
+            
 
             return _mapper.Map<GlassesResponse>(glasses);
         }
@@ -60,8 +59,7 @@ namespace OpticianWebAPI.Services.concretes
             await _appDbContext.Glasses.AddAsync(glasses);
             await _appDbContext.SaveChangesAsync();
 
-            _logger.LogInformation("Gözlük oluşturuldu. Çerçeve: {Frame}, Cam: {Lens}, Tutar: {TotalPrice}, Oluşturulma Tarihi: {CreatedAt}",
-            glasses.Frame,glasses.Lens,glasses.TotalPrice,glasses.CreatedAt);
+            
 
             return _mapper.Map<GlassesResponse>(glasses);
         }
@@ -91,8 +89,7 @@ namespace OpticianWebAPI.Services.concretes
 
             await _appDbContext.SaveChangesAsync();
 
-            _logger.LogInformation("Gözlük güncellendi. Çerçeve: {Frame}, Cam: {Lens}, Tutar: {TotalPrice}, Güncellenme Tarihi: {UpdateAt}",
-            existingGlasses.Frame,existingGlasses.Lens,existingGlasses.TotalPrice,existingGlasses.UpdatedAt);
+            
 
             return true;
         }
@@ -105,7 +102,7 @@ namespace OpticianWebAPI.Services.concretes
             _appDbContext.Glasses.Remove(glasses);
             await _appDbContext.SaveChangesAsync();
 
-            _logger.LogInformation("Gözlük silindi. Gözlük No: {Id}",glasses.Id);
+            
 
             return true;
         }

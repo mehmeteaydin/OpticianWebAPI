@@ -37,7 +37,7 @@ namespace OpticianWebAPI.Services.concretes
                 expires: DateTime.Now.AddMinutes(60),
                 signingCredentials: credentials);
 
-            _logger.LogInformation("Giriş Yapıldı. Username: {loginUsername}", loginRequest.Username);
+            
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
