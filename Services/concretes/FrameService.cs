@@ -5,15 +5,21 @@ using Microsoft.EntityFrameworkCore;
 using OpticianWebAPI.DTOs;
 using OpticianWebAPI.Models;
 using OpticianWebAPI.DatabaseContext;
+using System.Runtime.CompilerServices;
+using Microsoft.Extensions.Caching.Memory;
 
 
 namespace OpticianWebAPI.Services.concretes
 {
-    public class FrameService(AppDbContext appDbContext,ILogger<FrameService> logger, IMapper mapper) : IFrameService
+    public class FrameService(AppDbContext appDbContext,ILogger<FrameService> logger, IMapper mapper, IMemoryCache cache) : IFrameService
     {
         private readonly IMapper _mapper = mapper;
         private readonly AppDbContext _appDbContext = appDbContext;
         private readonly ILogger<FrameService> _logger = logger;
+
+        private readonly IMemoryCache _cache = cache;
+        private readonly string FrameCacheKey = "all_frames_list";
+
 
         public async Task<FrameResponse> CreateFrameAsync(CreateFrameRequest request)
         {
@@ -27,6 +33,7 @@ namespace OpticianWebAPI.Services.concretes
             _logger.LogInformation("Yeni çerçeve eklendi. Model Kodu: {ModelCode}, Tutar: {Amount}, Renk: {Color}, Materiyal: {Material}, Stok Miktarı: {StockQuantity}, Ekleme Tarihi: {CreatedAt}",
             frame.ModelCode,frame.Cost,frame.Color,frame.Material,frame.StockQuantity,frame.CreatedAt);
 
+            _cache.Remove(FrameCacheKey);
 
             return _mapper.Map<FrameResponse>(frame);  
         }
@@ -50,15 +57,38 @@ namespace OpticianWebAPI.Services.concretes
 
         public async Task<IEnumerable<FrameResponse>> GetAllFramesAsync()
         {
+
+            if(_cache.TryGetValue(FrameCacheKey, out IEnumerable<FrameResponse>? cachedList))
+            {
+                return cachedList!;
+            }
+            
+            
             var frames = await _appDbContext.Frames.ToListAsync();
 
             _logger.LogInformation("Bütün çerçeveler getirildi.");
+
+            var cacheOptions = new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30),
+                Priority = CacheItemPriority.Normal
+            };
+
+            // Hata çıkarabilir (?)
+            _cache.Set(FrameCacheKey, frames, cacheOptions);
+
 
             return _mapper.Map<IEnumerable<FrameResponse>>(frames);
         }
 
         public async Task<FrameResponse?> GetFrameByIdAsync(Guid id)
         {
+
+            if(_cache.TryGetValue(FrameCacheKey, out FrameResponse? cachedList))
+            {
+                return cachedList;
+            }
+            
             var frame = await _appDbContext.Frames.FindAsync(id);
 
             if (frame == null)
@@ -67,6 +97,15 @@ namespace OpticianWebAPI.Services.concretes
             }
 
             _logger.LogInformation("İstenilen çerçeve getirildi. Cam No: {Id}",frame.Id);
+
+            var cacheOptions = new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30),
+                Priority = CacheItemPriority.Normal
+            };
+
+            _cache.Set(FrameCacheKey, frame, cacheOptions);
+
             return _mapper.Map<FrameResponse>(frame);
         }
 
@@ -90,6 +129,8 @@ namespace OpticianWebAPI.Services.concretes
 
             _logger.LogInformation("Bu ne bilmiyorum ???");
 
+            _cache.Remove(FrameCacheKey);
+
             return _mapper.Map<IEnumerable<FrameResponse>>(frames);
         }
 
@@ -106,6 +147,8 @@ namespace OpticianWebAPI.Services.concretes
             existingFrame.UpdatedAt = DateTimeOffset.UtcNow;
 
             await _appDbContext.SaveChangesAsync();
+
+            _cache.Remove(FrameCacheKey);
 
             return _mapper.Map<FrameResponse>(existingFrame);
         }
@@ -127,6 +170,9 @@ namespace OpticianWebAPI.Services.concretes
             _logger.LogInformation("Çerçeve güncellendi.");
             
             await _appDbContext.SaveChangesAsync();
+
+            _cache.Remove(FrameCacheKey);
+            
 
             return true;
         }

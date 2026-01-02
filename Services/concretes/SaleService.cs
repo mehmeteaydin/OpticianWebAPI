@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 using OpticianWebAPI.DatabaseContext;
 using OpticianWebAPI.DTOs;
@@ -14,14 +15,21 @@ namespace OpticianWebAPI.Services.concretes
     {
         private readonly AppDbContext _context;
         private readonly ILogger<SaleService> _logger;
+        private readonly IMemoryCache _cache;
+        private readonly string SaleCacheKey = "all_sales_list";
 
-        public SaleService(AppDbContext context, ILogger<SaleService> logger)
+        public SaleService(AppDbContext context, ILogger<SaleService> logger, IMemoryCache cache)
         {
             _context = context;
             _logger = logger;
+            _cache = cache;
         }
         public async Task<SaleResponse> MakeSaleAsync(CreateSaleRequest request)
         {
+            if(_cache.TryGetValue(SaleCacheKey, out SaleResponse? cachedList))
+            {
+                return cachedList!;
+            }
             var frame = _context.Frames.FirstOrDefault(f => f.Id == request.FrameId);
 
             if (frame == null)
@@ -77,6 +85,14 @@ namespace OpticianWebAPI.Services.concretes
             await _context.Sales.AddAsync(newSale);
 
             await _context.SaveChangesAsync();
+
+            var cacheOptions = new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30),
+                Priority = CacheItemPriority.Normal
+            };
+
+            _cache.Set(SaleCacheKey, newSale, cacheOptions);
 
            
             return new SaleResponse
