@@ -47,6 +47,13 @@ namespace OpticianWebAPI.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ExpenseResponse>>> GetExpenses()
+        {
+            var expenseList = await _expenseService.GetAllExpensesAsync();
+            return Ok(expenseList);
+        }
+
 
     }
 }

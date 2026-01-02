@@ -66,7 +66,7 @@ namespace OpticianWebAPI.Services.concretes
 
                 Type = request.GlassesType,
                 Description = request.Description,
-                CreatedAt = DateTimeOffset.Now,
+                CreatedAt = DateTimeOffset.UtcNow,
             };
 
             newGlasses.CalculatePrice();

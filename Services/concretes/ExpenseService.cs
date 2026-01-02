@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using OpticianWebAPI.DatabaseContext;
@@ -14,16 +15,18 @@ namespace OpticianWebAPI.Services.concretes
     public class ExpenseService : IExpenseService
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
         private readonly ILogger<ExpenseService> _logger;
         private readonly IMemoryCache _cache;
 
         private const string ExpensesCacheKey = "all_expenses_list";
 
-        public ExpenseService(AppDbContext context, ILogger<ExpenseService> logger, IMemoryCache cache)
+        public ExpenseService(AppDbContext context, ILogger<ExpenseService> logger, IMemoryCache cache,IMapper mapper)
         {
             _context = context;
             _logger = logger;
             _cache = cache;
+            _mapper = mapper;
         }
         public async Task<ExpenseResponse> AddExpenseAsync(CreateExpenseRequest request)
         {
@@ -33,7 +36,7 @@ namespace OpticianWebAPI.Services.concretes
                 Amount = request.Amount,
                 Description = request.Description,
                 ExpenseType = request.Type,
-                ExpenseDate = DateTimeOffset.Now
+                ExpenseDate = DateTimeOffset.UtcNow
             };
 
             await _context.Expenses.AddAsync(expense);
@@ -57,7 +60,7 @@ namespace OpticianWebAPI.Services.concretes
 
         }
 
-        // Buna gerek kalmadı
+        // Buna gerek kalmadı ama duruyor şimdilik
         public Task<Dictionary<int, string>> GetAllExtepnseTypesAsync()
         {
                 var types = Enum.GetValues(typeof(ExpensesType))
@@ -68,10 +71,12 @@ namespace OpticianWebAPI.Services.concretes
 
                 _logger.LogInformation("Bütün giderler getirildi.");
 
+                
+
                 return Task.FromResult(types);
         }
 
-        public async Task<List<ExpenseResponse>> GetAllExpensesAsync()
+        public async Task<IEnumerable<ExpenseResponse>> GetAllExpensesAsync()
         {
 
             if (_cache.TryGetValue(ExpensesCacheKey, out List<ExpenseResponse>? cachedList))
@@ -100,7 +105,7 @@ namespace OpticianWebAPI.Services.concretes
 
             _cache.Set(ExpensesCacheKey, responseList, cacheOptions);
 
-            return responseList;
+            return _mapper.Map<IEnumerable<ExpenseResponse>>(responseList);
         }
     }
 }
