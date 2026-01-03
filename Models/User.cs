@@ -23,9 +23,12 @@ namespace OpticianWebAPI.Models
         public RoleType Role {get; set;}
 
         [Required]
-        [Column("password")]
-        public string Password {get; set;} = string.Empty;
+        [Column("password_hash")]
+        public byte[] PasswordHash { get; set; } = new byte[0];
 
+        [Required]
+        [Column("password_salt")]
+        public byte[] PasswordSalt { get; set; } = new byte[0];
     }
 
     public enum RoleType
