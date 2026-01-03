@@ -6,7 +6,8 @@ namespace OpticianWebAPI.Services.abstracts
 {
     public interface IAuthService
     {
-        public string? Login(LoginRequest loginRequest);
+        public Task<string?> Login(LoginRequest loginRequest);
+        public Task<bool> RegisterUser(RegisterUserRequest registerUserRequest); 
 
     }
 }
