@@ -1,0 +1,25 @@
+# 1. Aşama: Build (Derleme) işlemi için SDK kullanıyoruz
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /app
+
+# Proje dosyalarını kopyala
+COPY *.csproj ./
+# Kütüphaneleri indir (Restore)
+RUN dotnet restore
+
+# Kalan tüm dosyaları kopyala
+COPY . .
+
+# Uygulamayı yayınla (Publish)
+RUN dotnet publish -c Release -o out
+
+# 2. Aşama: Çalıştırma (Runtime) için daha hafif imajı kullanıyoruz
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+COPY --from=build /app/out .
+
+# Uygulamanın çalışacağı portu belirtiyoruz (Azure bunu otomatik yönetir ama standarttır)
+EXPOSE 8080
+
+# Uygulamayı başlat
+ENTRYPOINT ["dotnet", "OpticianWebAPI.dll"]
