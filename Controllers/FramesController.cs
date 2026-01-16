@@ -64,7 +64,7 @@ namespace OpticianWebAPI.Controllers
         {
             if (string.IsNullOrWhiteSpace(term))
             {
-                return BadRequest("Arama boş olamaz");
+                return BadRequest("Arama bos olamaz");
             }
             var searchedFrames = await frameService.SearchFramesAsync(term);
             return Ok(searchedFrames);
@@ -74,7 +74,7 @@ namespace OpticianWebAPI.Controllers
         [HttpPatch("{id}/stock")]
         public async Task<IActionResult> UpdateStockQuantity([FromRoute] Guid id,[FromBody] int amount)
         {
-            if(amount < 1) return BadRequest("Miktar 0 dan küçük olamaz ");
+            if(amount < 1) return BadRequest("Miktar 0 dan kucuk olamaz ");
 
             await frameService.UpdateStockQuantityAsync(id,amount);
             return NoContent();
