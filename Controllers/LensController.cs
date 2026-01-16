@@ -12,7 +12,7 @@ namespace OpticianWebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class LensController(ILensService lensService) : ControllerBase
     {
         private readonly ILensService lensService = lensService;
@@ -28,7 +28,7 @@ namespace OpticianWebAPI.Controllers
         public async Task<ActionResult<FrameResponse>> CreateLens([FromBody] CreateLensRequest createLensRequest)
         {
             await lensService.CreateLensAsync(createLensRequest);
-            return Created("Lens başarıyla oluşturuldu.",createLensRequest);
+            return Created("Lens basariyla olusturuldu.",createLensRequest);
         }
 
         [HttpDelete("{id}")]
@@ -54,7 +54,7 @@ namespace OpticianWebAPI.Controllers
         [HttpPatch]
         public async Task<IActionResult> UpdateLensCost(Guid id,decimal newCost)
         {
-            if (newCost < 0) return BadRequest("Yeni Fiyat 0'dan küçük olamaz");
+            if (newCost < 0) return BadRequest("Yeni Fiyat 0'dan kucuk olamaz");
             await lensService.UpdateLensCost(id,newCost);
             return NoContent();
         }

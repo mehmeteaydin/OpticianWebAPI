@@ -5,7 +5,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using OpticianWebAPI.DatabaseContext;
-using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 

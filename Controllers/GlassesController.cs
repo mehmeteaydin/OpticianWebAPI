@@ -26,7 +26,7 @@ namespace OpticianWebAPI.Controllers
 
             if (glasses == null)
             {
-                return NotFound($"ID'si {id} olan gözlük bulunamadı.");
+                return NotFound($"ID'si {id} olan gozluk bulunamadi.");
             }
 
             return Ok(glasses);
@@ -57,7 +57,7 @@ namespace OpticianWebAPI.Controllers
 
                 if (!isUpdated)
                 {
-                    return NotFound($"Güncellenecek ID ({id}) bulunamadı.");
+                    return NotFound($"Guncellenecek ID ({id}) bulunamadi.");
                 }
                 return NoContent();
             }
@@ -75,7 +75,7 @@ namespace OpticianWebAPI.Controllers
 
             if (!isDeleted)
             {
-                return NotFound($"Silinecek ID ({id}) bulunamadı.");
+                return NotFound($"Silinecek ID ({id}) bulunamadi.");
             }
 
             return NoContent();

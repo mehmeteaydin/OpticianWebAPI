@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 using OpticianWebAPI.DatabaseContext;
@@ -17,12 +19,14 @@ namespace OpticianWebAPI.Services.concretes
         private readonly ILogger<SaleService> _logger;
         private readonly IMemoryCache _cache;
         private readonly string SaleCacheKey = "all_sales_list";
+        private readonly IMapper _mapper;
 
-        public SaleService(AppDbContext context, ILogger<SaleService> logger, IMemoryCache cache)
+        public SaleService(AppDbContext context, ILogger<SaleService> logger, IMemoryCache cache,IMapper mapper)
         {
             _context = context;
             _logger = logger;
             _cache = cache;
+            _mapper = mapper;
         }
         public async Task<SaleResponse> MakeSaleAsync(CreateSaleRequest request)
         {
@@ -43,7 +47,7 @@ namespace OpticianWebAPI.Services.concretes
             }
 
             frame.StockQuantity -= 1;
-            frame.UpdatedAt = DateTimeOffset.Now;
+            frame.UpdatedAt = DateTimeOffset.UtcNow;
 
             var newLens = new Lens
             {
@@ -105,6 +109,18 @@ namespace OpticianWebAPI.Services.concretes
                 FrameInfo = $"{frame.Brand} - {frame.ModelCode} ({frame.Color})",
                 LensInfo = $"[Sol: {newLens.Left} / Sağ: {newLens.Right}]"
             };
+        }
+
+        public async Task<IEnumerable<SaleResponse>> GetAllSales()
+        {
+            var responseList = await _context.Sales.ToListAsync();
+            return _mapper.Map<IEnumerable<SaleResponse>>(responseList);
+        }
+
+        public async Task<SaleResponse> GetSaleAsync(Guid id)
+        {
+            var sale = await _context.Sales.FindAsync(id);
+            return _mapper.Map<SaleResponse>(sale); 
         }
     }
 }

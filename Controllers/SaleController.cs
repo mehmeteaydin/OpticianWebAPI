@@ -39,5 +39,23 @@ namespace OpticianWebAPI.Controllers
                 return BadRequest(new {message = ex.Message});
             }
         }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<SaleResponse>>> GetSales()
+        {
+            var responseList = _saleService.GetAllSales();
+            return Ok(responseList);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<SaleResponse>> GetSaleById([FromBody] Guid id)
+        {
+            var sale = _saleService.GetSaleAsync(id);
+            if (sale == null)
+            {
+                return NotFound();
+            }
+            return Ok(sale);
+        }
     }
 }
